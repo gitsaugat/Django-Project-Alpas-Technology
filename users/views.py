@@ -81,15 +81,11 @@ class RegisterView(View):
                             success(
                                 request, f'Successfully Registered as {username}')
                             return redirect('/user/login')
-                        else:
-                            error(
-                                request, 'Password length must be greater than or equal to 8')
-                    else:
-                        error(request, 'Password Validation Failed')
-                else:
-                    error(request, 'Try a different username')
-            else:
-                error(request, 'User with the email exists')
+                        error(
+                            request, 'Password length must be greater than or equal to 8')
+                    error(request, 'Password Validation Failed')
+                error(request, 'Try a different username')
+            error(request, 'User with the email exists')
         return redirect('/user/register')
 
 
@@ -100,34 +96,37 @@ class LogoutView(View):
         return redirect('/')
 
 
-def password_reset_request(request):
-    if request.user.is_authenticated:
-        return redirect('/')
-    if request.method == "POST":
-        password_reset_form = PasswordResetForm(request.POST)
-        if password_reset_form.is_valid():
-            data = password_reset_form.cleaned_data['email']
-            user = User.objects.get(email=data)
-            if user:
+class PassworReset(View):
+    def get(self, request):
+        password_reset_form = PasswordResetForm()
+        return render(request=request, template_name="users/password_reset.html", context={"form": password_reset_form})
 
-                subject = "Password Reset Requested"
-                email_template_name = "users/txts/password_reset_email.txt"
-                c = {
-                    "email": user.email,
-                    'domain': 'localhost:8000',
-                    'site_name': 'Website',
-                    "uid": urlsafe_base64_encode(force_bytes(user.id)),
+    def post(self, request):
+        if request.user.is_authenticated:
+            return redirect('/')
+        if request.method == "POST":
+            password_reset_form = PasswordResetForm(request.POST)
+            if password_reset_form.is_valid():
+                data = password_reset_form.cleaned_data['email']
+                user = User.objects.get(email=data)
+                if user:
 
-                    "user": user,
-                    'token': default_token_generator.make_token(user),
-                    'protocol': 'http',
-                }
-                email = render_to_string(email_template_name, c)
-                try:
-                    send_mail(subject, email, 'admin@example.com',
-                              [user.email], fail_silently=False)
-                except BadHeaderError:
-                    return HttpResponse('Invalid header found.')
-                return redirect("password_reset_done")
-    password_reset_form = PasswordResetForm()
-    return render(request=request, template_name="users/password_reset.html", context={"form": password_reset_form})
+                    subject = "Password Reset Requested"
+                    email_template_name = "users/txts/password_reset_email.txt"
+                    c = {
+                        "email": user.email,
+                        'domain': 'localhost:8000',
+                        'site_name': 'Website',
+                        "uid": urlsafe_base64_encode(force_bytes(user.id)),
+
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    email = render_to_string(email_template_name, c)
+                    try:
+                        send_mail(subject, email, 'admin@example.com',
+                                  [user.email], fail_silently=False)
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    return redirect("password_reset_done")
