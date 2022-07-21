@@ -1,8 +1,9 @@
 import os
+import pathlib
 from django.core.exceptions import ImproperlyConfigured
 
 APP_MODE = os.environ.get('MODE')
-
+print(pathlib.Path(__file__).resolve().parent.parent)
 if not APP_MODE:
     raise ImproperlyConfigured("No mode specified for project")
 if APP_MODE == 'DEV':

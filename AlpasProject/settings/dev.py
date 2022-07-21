@@ -1,7 +1,7 @@
 import os
 from AlpasProject.settings.base import *
 
-DEBUG = os.environ.get('DEBUG')
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
