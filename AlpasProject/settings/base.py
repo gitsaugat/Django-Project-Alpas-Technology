@@ -24,7 +24,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'mantralaya.urls'
+ROOT_URLCONF = 'AlpasProject.urls'
 
 TEMPLATES = [
     {
@@ -42,7 +42,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'mantralaya.wsgi.application'
+WSGI_APPLICATION = 'AlpasProject.wsgi.application'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -74,5 +74,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-AUTH_USER_MODEL = 'user.User'

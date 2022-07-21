@@ -6,8 +6,7 @@ DEBUG = os.environ.get('DEBUG')
 ALLOWED_HOSTS = ['*']
 
 CUSTOM_APPS = [
-    'user',
-    'core'
+    'users',
 ]
 
 THIRD_PARTY_APPS = [
