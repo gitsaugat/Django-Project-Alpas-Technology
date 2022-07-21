@@ -1,0 +1,18 @@
+{%extends 'users/authorizationBase.html'%} {% load crispy_forms_tags %}
+<!--hello-->
+{%block content%} {%block css%}
+<style>
+  form {
+    width: 50%;
+    margin: auto;
+  }
+</style>
+{%endblock%}
+
+<form method="post">
+  <h3>Done!</h3>
+  <hr />
+  <p>Your password has been reset.</p>
+  <br />
+</form>
+{%endblock%}
