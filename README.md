@@ -1,6 +1,6 @@
-# Welcome to Potify 👋
+# Welcome to Alpas Project 👋
 
-# POTIFY
+# Alpas project
 
 ## Prerequisites
 
