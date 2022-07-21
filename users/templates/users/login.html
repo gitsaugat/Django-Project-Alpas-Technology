@@ -1,4 +1,4 @@
-{%extends 'users/authorizationBase.html'%} {%block content%} {%block style%}
+{%extends 'users/authorizationBase.html'%}  {%block css%}
 <style>
   form {
     margin-top: 10%;
@@ -8,6 +8,7 @@
   }
 </style>
 {%endblock%}
+{%block content%}
 <form method="POST">
   <br />
   {%csrf_token%}
@@ -36,8 +37,8 @@
 
   <!-- Register buttons -->
   <div class="text-center">
-    <p>Not a member? <a href="#!">Register</a></p>
-    <p>Forgot Password ? <a href="#!">Reset Password</a></p>
+    <p>Not a member? <a href="{%url 'register_view'%}">Register</a></p>
+    <p>Forgot Password ? <a href="{%url 'password_reset_view'%}">Reset Password</a></p>
    
   </div>
 </form>

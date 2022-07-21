@@ -7,6 +7,7 @@ ALLOWED_HOSTS = ['*']
 
 CUSTOM_APPS = [
     'users',
+    'core'
 ]
 
 THIRD_PARTY_APPS = [
