@@ -1,4 +1,5 @@
 from os import umask
+from urllib import request
 from django.shortcuts import redirect, render, HttpResponse
 from django.views import View
 from .forms import LoginForm, RegisterForm
@@ -24,6 +25,8 @@ import os
 class LoginView(View):
 
     def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('/')
         template_name = 'users/login.html'
         context = {
             'title': 'Login Page',
@@ -49,6 +52,8 @@ class LoginView(View):
 class RegisterView(View):
 
     def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('/')
         template_name = 'users/register.html'
         context = {
             'title': 'Register Page',
@@ -96,6 +101,8 @@ class LogoutView(View):
 
 
 def password_reset_request(request):
+    if request.user.is_authenticated:
+        return redirect('/')
     if request.method == "POST":
         password_reset_form = PasswordResetForm(request.POST)
         if password_reset_form.is_valid():
