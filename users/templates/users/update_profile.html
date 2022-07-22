@@ -1,0 +1,104 @@
+{%extends 'core/base.html'%} {%load crispy_forms_tags%} {%block content%}
+<!--profoile-->
+<section>
+    {%if profile_exists%}
+
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img
+              src="{{profile.profile_image.url}}"
+              alt="avatar"
+              class="rounded-circle img-fluid"
+              style="width: 150px"
+            />
+            <h5 class="my-3">{{profile.user.username}}</h5>
+            <p class="text-muted mb-1">Role ---</p>
+            <p class="text-muted mb-4">{{profile.zip_code}},{{profile.city}},{{profile.country}}</p>
+            <!-- <div class="d-flex justify-content-center mb-2">
+              <button type="button" class="btn btn-primary">Follow</button>
+              <button type="button" class="btn btn-outline-primary ms-1">
+                Message
+              </button>
+            </div> -->
+          </div>
+        </div>
+        <div class="card mb-4 mb-lg-0">
+            <div class="card mb-4">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Full Name</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">{{full_name}}</p>
+                    </div>
+                  </div>
+                  <hr />
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Email</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">{{profile.user.email}}</p>
+                    </div>
+                  </div>
+                  <hr />
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Telephone</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">{{profile.telephone_no}}</p>
+                    </div>
+                  </div>
+                  <hr />
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Mobile</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">{{profile.mobile_no}}</p>
+                    </div>
+                  </div>
+                  <hr />
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Address</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">{{profile.zip_code}},{{profile.city}},{{profile.country}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+      </div>
+      {%endif%}
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            
+            <form method="POST" enctype="multipart/form-data">
+
+            
+                <h3>Update Profile</h3>
+                <hr />
+                {%csrf_token%} {{form|crispy}}
+              
+                <br />
+                <button class="btn btn-primary" type="submit">Update Profile</button>
+                <a class="btn btn-success" onclick="window.history.back()">Go Back</a>
+                <hr />
+              </form>
+           
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%endblock%}

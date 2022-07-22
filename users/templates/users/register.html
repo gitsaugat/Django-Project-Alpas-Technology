@@ -2,7 +2,7 @@
 {%block css%}
 <style>
   form {
-    margin-top: 10%;
+    margin-top: 5%;
     width: 40%;
     margin-right: auto;
     margin-left: auto;
@@ -14,6 +14,14 @@
   <br />
   {%csrf_token%}
   <!-- Email input -->
+  <div class="form-outline mb-4">
+    <label class="form-label" for="form2Example1">First Name</label>
+    {{form.fname}}
+  </div>
+  <div class="form-outline mb-4">
+    <label class="form-label" for="form2Example1">Last Name</label>
+    {{form.lname}}
+  </div>
   <div class="form-outline mb-4">
     <label class="form-label" for="form2Example1">Username</label>
     {{form.username}}

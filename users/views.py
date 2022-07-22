@@ -1,8 +1,12 @@
-from os import umask
+import profile
 from urllib import request
+from .models import Userprofile
+from pyexpat.errors import messages
+from readline import read_init_file
 from django.shortcuts import redirect, render, HttpResponse
+from django.urls import is_valid_path
 from django.views import View
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, UserProfileForm
 from django.contrib.messages import error, success, warning
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -12,12 +16,9 @@ from .utils import UserValidation
 from django.contrib.auth.forms import PasswordResetForm
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
-from django.db.models.query_utils import Q
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
-from AlpasProject.settings import BASE_DIR
-import os
 
 # Create your views here.
 
@@ -68,6 +69,8 @@ class RegisterView(View):
             email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password')
             confirm_password = form.cleaned_data.get('confirm_password')
+            first_name = form.cleaned_data.get('fname')
+            last_name = form.cleaned_data.get('lname')
             validation = UserValidation(
                 username, email, password, confirm_password)
             if validation.validate_email():
@@ -75,7 +78,8 @@ class RegisterView(View):
                     if validation.validate_password():
                         if validation.validate_password_length():
                             newuser = User.objects.create(
-                                username=username, email=email)
+                                username=username, email=email, first_name=first_name, last_name=last_name)
+
                             newuser.set_password(password)
                             newuser.save()
                             success(
@@ -130,3 +134,49 @@ class PassworReset(View):
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
                     return redirect("password_reset_done")
+
+
+class UserProfileView(View):
+    def get_full_name(self, id):
+        user = User.objects.get(id=id)
+        return f"{user.first_name} {user.last_name}"
+
+    @method_decorator(login_required)
+    def get(self, request):
+        template_name = "users/update_profile.html"
+
+        context = {
+            'title': 'User Profile',
+            'form': None,
+            'full_name': self.get_full_name(request.user.id)
+        }
+        profiles = Userprofile.objects.filter(user=request.user)
+        if len(profiles) > 0:
+            context['form'] = UserProfileForm(instance=profiles[0])
+            context['profile_exists'] = True
+            context['profile'] = profiles[0]
+        else:
+            context['form'] = UserProfileForm()
+        return render(request, template_name, context)
+
+    def post(self, request):
+        profiles = Userprofile.objects.filter(user=request.user)
+        form = UserProfileForm(request.POST, request.FILES)
+
+        if len(profiles) > 0:
+            form = UserProfileForm(
+                request.POST, request.FILES, instance=profiles[0])
+        if form.is_valid():
+
+            try:
+                newuserprofilemodel = form.save(commit=False)
+                newuserprofilemodel.user = request.user
+                newuserprofilemodel.save()
+                success(request, 'Updated !')
+                return redirect('user_profile_view')
+            except Exception as e:
+                error(request, str(e))
+                return redirect('user_profile_view')
+        for err in form.errors:
+            error(request, str(err))
+        return redirect('user_profile_view')
