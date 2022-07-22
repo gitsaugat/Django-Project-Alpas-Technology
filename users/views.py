@@ -1,13 +1,9 @@
-import profile
-from urllib import request
+
 from .models import Userprofile
-from pyexpat.errors import messages
-from readline import read_init_file
 from django.shortcuts import redirect, render, HttpResponse
-from django.urls import is_valid_path
 from django.views import View
-from .forms import LoginForm, RegisterForm, UserProfileForm
-from django.contrib.messages import error, success, warning
+from .forms import LoginForm, RegisterForm, UserProfileForm, UpdatePasswordForm, EmailUpdateForm, UsernameUpdateForm, Personal
+from django.contrib.messages import error, success, warning, get_messages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth import authenticate, login, logout
@@ -19,6 +15,8 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
+from core.views import PF_LG_DECO
+from django.contrib.sessions.models import Session
 
 # Create your views here.
 
@@ -180,3 +178,101 @@ class UserProfileView(View):
         for err in form.errors:
             error(request, str(err))
         return redirect('user_profile_view')
+
+
+class UsersSetting(View):
+    @method_decorator(PF_LG_DECO)
+    def get(self, request):
+        print(request.session.keys())
+
+        template_name = "users/settings.html"
+        context = {
+            'title': 'Settings',
+            'username_form': UsernameUpdateForm(),
+            'password_form': UpdatePasswordForm(),
+            'email_form': EmailUpdateForm(),
+            'personal_from': Personal()
+        }
+        return render(request, template_name, context)
+
+    def post(self, request):
+        request.session['_messages'] = []
+        print(request.session['_messages'])
+        username_form = UsernameUpdateForm(request.POST)
+        password_form = UpdatePasswordForm(request.POST)
+        email_form = EmailUpdateForm(request.POST)
+        personal_from = Personal(request.POST)
+        user = User.objects.get(id=request.user.id)
+        validator = UserValidation('', '', '', '')
+
+        if username_form.is_valid():
+
+            username = username_form.cleaned_data.get('username')
+            validator.username = username
+            if validator.validate_username():
+                try:
+                    user.username = username
+                    user.save()
+                    success(request, 'Username Updated')
+                    return redirect('user_settings_view')
+                except Exception as e:
+                    error(request, str(e))
+                    return redirect('user_settings_view')
+
+            else:
+                error(request, 'Try a different username')
+                return redirect('user_settings_view')
+
+        if email_form.is_valid():
+            email = email_form.cleaned_data.get('email')
+            validator.email = email
+            if validator.validate_email():
+
+                user.email = email
+                try:
+                    user.save()
+                    success(request, 'Email Updated')
+                    return redirect('user_settings_view')
+                except Exception as e:
+                    error(request, str(e))
+                    return redirect('user_settings_view')
+
+            else:
+                error(request, 'Try a different email')
+                return redirect('user_settings_view')
+
+        if personal_from.is_valid():
+            fname = personal_from.cleaned_data.get('fname')
+            lname = personal_from.cleaned_data.get('lname')
+
+            user.first_name = fname
+            user.last_name = lname
+            try:
+                user.save()
+                success(request, 'Personal Information Updated')
+                return redirect('user_settings_view')
+            except Exception as e:
+                error(request, str(e))
+                print(e)
+                return redirect('user_settings_view')
+
+        if password_form.is_valid():
+            password = password_form.cleaned_data.get('password')
+            confirm_password = password_form.cleaned_data.get(
+                'confirm_password')
+            validator.confirmed_password = confirm_password
+            validator.password = password
+            if password == confirm_password:
+                if validator.validate_password_length():
+                    try:
+                        user.set_password(password)
+                        success(request, 'Password Updated')
+                        return redirect('user_settings_view')
+                    except Exception as e:
+                        error(request, str(e))
+                        return redirect('user_settings_view')
+                else:
+                    error(request, str(e))
+                    return redirect('user_settings_view')
+        error(request, 'Error occoured')
+        return redirect('user_setting_page')
