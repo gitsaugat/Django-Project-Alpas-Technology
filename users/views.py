@@ -195,16 +195,41 @@ class UsersSetting(View):
         }
         return render(request, template_name, context)
 
-    def post(self, request):
-        request.session['_messages'] = []
-        print(request.session['_messages'])
-        username_form = UsernameUpdateForm(request.POST)
-        password_form = UpdatePasswordForm(request.POST)
-        email_form = EmailUpdateForm(request.POST)
-        personal_from = Personal(request.POST)
-        user = User.objects.get(id=request.user.id)
-        validator = UserValidation('', '', '', '')
 
+class EmailResetView(View):
+    @method_decorator(PF_LG_DECO)
+    def post(self, request):
+        email_form = EmailUpdateForm(request.POST)
+        validator = UserValidation('', '', '', '')
+        user = request.user
+        if email_form.is_valid():
+            email = email_form.cleaned_data.get('email')
+            validator.email = email
+            if validator.validate_email():
+                user.email = email
+                try:
+                    user.save()
+                    success(request, 'Email Updated')
+                    return redirect('user_settings_view')
+                except Exception as e:
+                    error(request, str(e))
+                    return redirect('user_settings_view')
+
+            else:
+                error(request, 'Try a different email')
+                return redirect('user_settings_view')
+        else:
+            for er in email_form.errors:
+                error(request, er)
+            return redirect('user_settings_view')
+
+
+class UsernameResetView(View):
+    @method_decorator(PF_LG_DECO)
+    def post(self, request):
+        username_form = UsernameUpdateForm(request.POST)
+        validator = UserValidation('', '', '', '')
+        user = request.user
         if username_form.is_valid():
 
             username = username_form.cleaned_data.get('username')
@@ -222,24 +247,17 @@ class UsersSetting(View):
             else:
                 error(request, 'Try a different username')
                 return redirect('user_settings_view')
+        else:
+            for er in username_form.errors:
+                error(request, er)
+            return redirect('user_settings_view')
 
-        if email_form.is_valid():
-            email = email_form.cleaned_data.get('email')
-            validator.email = email
-            if validator.validate_email():
 
-                user.email = email
-                try:
-                    user.save()
-                    success(request, 'Email Updated')
-                    return redirect('user_settings_view')
-                except Exception as e:
-                    error(request, str(e))
-                    return redirect('user_settings_view')
-
-            else:
-                error(request, 'Try a different email')
-                return redirect('user_settings_view')
+class PersonalNameView(View):
+    @method_decorator(PF_LG_DECO)
+    def post(self, request):
+        personal_from = Personal(request.POST)
+        user = User.objects.get(id=request.user.id)
 
         if personal_from.is_valid():
             fname = personal_from.cleaned_data.get('fname')
@@ -255,7 +273,18 @@ class UsersSetting(View):
                 error(request, str(e))
                 print(e)
                 return redirect('user_settings_view')
+        else:
+            for er in personal_from.errors:
+                error(request, er)
+            return redirect('user_settings_view')
 
+
+class PasswordResetView(View):
+    @method_decorator(PF_LG_DECO)
+    def post(self, request):
+        password_form = PasswordResetForm(request.POST)
+        user = User.objects.get(id=request.user.id)
+        validator = UserValidation('', '', '', '')
         if password_form.is_valid():
             password = password_form.cleaned_data.get('password')
             confirm_password = password_form.cleaned_data.get(
@@ -274,5 +303,8 @@ class UsersSetting(View):
                 else:
                     error(request, str(e))
                     return redirect('user_settings_view')
-        error(request, 'Error occoured')
-        return redirect('user_setting_page')
+
+        else:
+            for er in password_form.errors:
+                error(request, er)
+            return redirect('user_settings_view')
