@@ -1,0 +1,62 @@
+{%extends 'users/authorizationBase.html'%} 
+{%block css%}
+<style>
+  form {
+    margin-top: 5%;
+    width: 40%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+</style>
+{%endblock%}
+{%block content%} 
+<form method="POST">
+  <br />
+  {%csrf_token%}
+  <!-- Email input -->
+  <div class="form-outline mb-4">
+    <label class="form-label" for="form2Example1">First Name</label>
+    {{form.fname}}
+  </div>
+  <div class="form-outline mb-4">
+    <label class="form-label" for="form2Example1">Last Name</label>
+    {{form.lname}}
+  </div>
+  <div class="form-outline mb-4">
+    <label class="form-label" for="form2Example1">Username</label>
+    {{form.username}}
+  </div>
+  <div class="form-outline mb-4">
+    <label class="form-label" for="form2Example1">Email</label>
+    {{form.email}}
+  </div>
+  <div class="form-outline mb-4">
+    <label class="form-label" for="form2Example1">Password</label>
+    {{form.password}}
+  </div>
+
+  <!-- Password input -->
+  <div class="form-outline mb-4">
+    <label class="form-label" for="form2Example2">Confirm Password</label>
+    {{form.confirm_password}}
+  </div>
+
+  <!-- 2 column grid layout for inline styling -->
+  
+
+    <div class="col">
+        <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+    </div>
+  </div>
+
+  <!-- Submit button -->
+  
+
+  <!-- Register buttons -->
+  <div class="text-center">
+    <p>Already a member ?  <a href="{%url 'login_view'%}">Login</a></p>
+   
+  </div>
+</form>
+{%endblock%}
+

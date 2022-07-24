@@ -1,0 +1,49 @@
+{%extends 'core/base.html'%}
+
+<!---->
+
+{%load crispy_forms_tags%} {%block content%} {%block css%}
+<style>
+  form {
+    width: 60%;
+    margin: auto;
+  }
+</style>
+{%endblock%}
+
+<form method="POST" action="{%url 'username_reset_view'%}">
+  <h4>Update Username</h4>
+  <hr />
+  {%csrf_token%} {{username_form|crispy}}
+  <br />
+  <button type="submit" class="btn btn-primary">Update</button>
+  <hr />
+</form>
+
+<form method="POST" action="{%url 'email_reset_view'%}">
+  <h4>Update Email</h4>
+  <hr />
+  {%csrf_token%} {{email_form|crispy}}
+  <br />
+  <button type="submit" class="btn btn-primary">Update</button>
+  <hr />
+</form>
+
+<form method="POST" action="{%url 'personal_reset_view'%}">
+  <h4>Update Name</h4>
+  <hr />
+  {%csrf_token%} {{personal_from|crispy}}
+  <br />
+  <button type="submit" class="btn btn-primary">Update</button>
+  <hr />
+</form>
+
+<form method="POST" action="{%url 'password_reset_view'%}">
+  <h4>Update Password</h4>
+  <hr />
+  {%csrf_token%} {{password_form|crispy}}
+  <br />
+  <button type="submit" class="btn btn-primary">Update</button>
+  <hr />
+</form>
+{%endblock%}

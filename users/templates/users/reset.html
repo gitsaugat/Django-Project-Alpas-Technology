@@ -1,0 +1,21 @@
+{%extends 'users/authorizationBase.html'%} {% load crispy_forms_tags %}
+<!--hello-->
+{%block content%} {%block css%}
+<style>
+  form {
+    width: 50%;
+    margin: auto;
+  }
+</style>
+{%endblock%}
+
+<form method="post">
+  <h3>Password Reset Form</h3>
+  <hr />
+  <p>Change Password</p>
+  {%csrf_token%} {{form|crispy}}
+  <br />
+  <button type="submit" class="btn btn-outline-primary">Submit</button>
+  <div class="text-center"></div>
+</form>
+{%endblock%}
