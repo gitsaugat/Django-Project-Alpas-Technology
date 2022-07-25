@@ -29,7 +29,7 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = Userprofile
         fields = '__all__'
-        exclude = ['user']
+        exclude = ['user', 'id']
 
 
 class UpdatePasswordForm(forms.Form):
