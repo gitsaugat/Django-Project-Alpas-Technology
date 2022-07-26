@@ -1,0 +1,52 @@
+{%extends 'vendor/base.html'%} {%load crispy_forms_tags%} {%block content%}
+{%block css%}
+<style>
+  input {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  select {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+</style>
+{%endblock%}
+<form method="POST">
+  {{form|crispy}} {%csrf_token%}
+
+  <button class="btn btn-secondary">Create</button>
+</form>
+<br />
+<br />
+<table class="table">
+  <thead>
+    <tr>
+      <th class="col">Fields</th>
+      <th class="col">Code</th>
+      <th class="col">Vendor Template key</th>
+      <th class="col">Edit</th>
+      <th class="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {%for field in template_fields%}
+    <tr>
+      <td scope="col">{{field.template_field_key}}</td>
+      <td scope="col">{{field.reference}}</td>
+      <td scope="col">{{field.id}}</td>
+      <td scope="col">
+        <a class="btn btn-primary" href="/edit/vendor/field/{{field.id}}"
+          >Edit</a
+        >
+      </td>
+      <td scope="col">
+        <a class="btn btn-danger" href="/delete/vendor/field/{{field.id}}"
+          >Delete</a
+        >
+      </td>
+    </tr>
+    {%endfor%}
+  </tbody>
+</table>
+
+{%endblock%}

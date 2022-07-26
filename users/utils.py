@@ -1,4 +1,7 @@
 from django.contrib.auth.models import User
+import json
+import uuid
+import datetime
 
 
 class UserValidation:
@@ -33,3 +36,28 @@ class UserValidation:
         if len(self.confirmed_password) > 7 and len(self.confirmed_password) <= 16:
             return True
         return False
+
+
+def get_err_data():
+    try:
+        with open('jsons/err.json', 'r') as stream:
+            data = json.load(stream)
+            stream.close()
+        return data
+    except Exception as e:
+        print(e)
+
+
+def write_err(err):
+    try:
+        with open('jsons/err.json', 'w') as stream:
+            existing_Err_data = get_err_data()
+            newdata = existing_Err_data['errors'].append({
+                'id': uuid.uuid4(),
+                'brief': err,
+                'datetime': datetime.datetime.now()
+            })
+
+            json.dump(stream, newdata)
+    except Exception as e:
+        print(e)

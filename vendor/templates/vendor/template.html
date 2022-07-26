@@ -1,0 +1,35 @@
+{%extends 'vendor/base.html'%} {%block content%}
+<!---->
+  <div class="row">
+    
+    <form action="{%url 'handle_csv'%}" method="post" enctype="multipart/form-data">
+        {%csrf_token%}
+      <input name="csv_file" type="file" class="form-control" />
+      <br />
+      <button type="submit" class="btn btn-danger">Import CSV</button>
+    </form>
+  </div>
+  <hr />
+  <div class="row">
+   
+    <form action="{%url 'handle_xls'%}">
+      <input type="file" class="form-control" />
+      <br />
+      <button type="submit" class="btn btn-danger">Import Excel</button>
+    </form>
+  </div>
+</div>
+
+<hr />
+<table class="table">
+  <thead>
+    <tr>
+      {%for field in template_fields%}
+      <th scope="col">{{field.template_field_key}}</th>
+
+      {%endfor%}
+    </tr>
+  </thead>
+</table>
+  {%endblock%}
+

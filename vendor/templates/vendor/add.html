@@ -1,0 +1,51 @@
+{%extends 'vendor/base.html'%} {%block content%}
+<!---->
+{%block css%}
+<style>
+  table {
+    overflow-x: scroll !important;
+    justify-content: center;
+  }
+  tr {
+    float: left;
+    width: 100%;
+    margin: auto;
+  }
+</style>
+{%endblock%}
+<h4>Invoice Data Demo</h4>
+<hr />
+<div
+  style="display: flex; flex-direction: column; justify-content: space-around"
+>
+  <div style="width: 200px; overflow: scroll"></div>
+  <div style="display: flex; justify-content: space-around">
+    {%for data in ultimate_list%}
+    <div>
+      <label>{{data.heading}}</label>
+      <br />
+      <br />
+      {%for row in data.data%} {%for r in row%}
+      <label>{{r}}</label>
+      <br />{%endfor%} {%endfor%}
+    </div>
+    {%endfor%}
+  </div>
+</div>
+<hr />
+<div id="confirmation_block" class="container">
+  <div class="row">
+    <a
+      href="/add/confirm/{{file_id}}/{{json_format_data}}/"
+      class="btn btn-success"
+      >Confirm Import</a
+    >
+  </div>
+  <br />
+  <div class="row">
+    <a href="/add/decline/{{file_id}}/" class="btn btn-danger"
+      >Discard And Setup Template</a
+    >
+  </div>
+</div>
+{%endblock%}
