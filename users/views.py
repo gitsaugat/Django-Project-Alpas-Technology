@@ -82,7 +82,7 @@ class RegisterView(View):
                             newuser.save()
                             success(
                                 request, f'Successfully Registered as {username}')
-                            return redirect('/user/login')
+                            return redirect('/')
                         else:
                             error(
                                 request, 'Password length must be greater than or equal to 8')
