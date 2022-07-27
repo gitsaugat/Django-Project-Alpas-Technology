@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from .decorators import profile_required
 from users.models import UserRoles
+from django_otp.decorators import otp_required
+
 # Create your views here.
 
 PF_LG_DECO = [login_required, profile_required]

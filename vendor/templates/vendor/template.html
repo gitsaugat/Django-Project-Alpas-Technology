@@ -4,7 +4,7 @@
     
     <form action="{%url 'handle_csv'%}" method="post" enctype="multipart/form-data">
         {%csrf_token%}
-      <input name="csv_file" type="file" class="form-control" />
+      <input name="csv_file" type="file" class="form-control"  required/>
       <br />
       <button type="submit" class="btn btn-danger">Import CSV</button>
     </form>
@@ -13,7 +13,7 @@
   <div class="row">
    
     <form action="{%url 'handle_xls'%}">
-      <input type="file" class="form-control" />
+      <input type="file" class="form-control" required/>
       <br />
       <button type="submit" class="btn btn-danger">Import Excel</button>
     </form>

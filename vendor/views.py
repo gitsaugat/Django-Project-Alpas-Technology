@@ -196,6 +196,7 @@ class Decline(View):
             file.file.delete()
             file.delete()
             success(request, 'Successfully Declined')
+            return redirect('vendor_template_setups')
         except:
             error(request, 'Error while declininng')
         return redirect('vendor_template')
