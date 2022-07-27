@@ -83,11 +83,15 @@ class RegisterView(View):
                             success(
                                 request, f'Successfully Registered as {username}')
                             return redirect('/user/login')
-                        error(
-                            request, 'Password length must be greater than or equal to 8')
-                    error(request, 'Password Validation Failed')
-                error(request, 'Try a different username')
-            error(request, 'User with the email exists')
+                        else:
+                            error(
+                                request, 'Password length must be greater than or equal to 8')
+                    else:
+                        error(request, 'Password Validation Failed')
+                else:
+                    error(request, 'Try a different username')
+            else:
+                error(request, 'User with the email exists')
         return redirect('/user/register')
 
 
