@@ -46,7 +46,7 @@ class FileStorage(models.Model):
     vendor = models.ForeignKey(User, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return self.vendor.username
+        return self.file.url
 
 
 class VendorTemplateFieldData(models.Model):

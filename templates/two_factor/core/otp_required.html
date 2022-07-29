@@ -12,9 +12,11 @@
     account. Enable two-factor authentication for enhanced account
     security.{% endblocktrans %}</p>
   <p>
-    <a href="javascript:history.go(-1)"
+    <div class="text-center">
+      <a href="javascript:history.go(-1)"
        class="float-right btn btn-link">{% trans "Go back" %}</a>
     <a href="{% url 'two_factor:setup' %}" class="btn btn-primary">
-    {% trans "Enable Two-Factor Authentication" %}</a>
+    </div>
+    {% trans "Enable Two-Factor Auth" %}</a>
   </p>
 {% endblock %}

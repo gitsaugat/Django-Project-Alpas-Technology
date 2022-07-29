@@ -2,10 +2,11 @@
 import pandas as pd
 from curses.panel import update_panels
 from django.conf import settings
+
 from django.shortcuts import redirect, render
 from django.views import View
 from .models import VendorTemplate, VendorTemplateField, VendorTemplateFieldData
-
+from .serializers import VendorInvoiceSerializer
 from .forms import TemplateSetupForms
 from django.contrib.messages import success, error, warning
 from .utils import Csv_handling
@@ -14,7 +15,11 @@ import json
 from AlpasProject.settings import BASE_DIR
 import os
 from django.core.files.storage import default_storage
-
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.contrib.auth.models import User
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
 
@@ -206,3 +211,14 @@ class XLS_handling_view(View):
 
     def post(self, request):
         pass
+
+
+class VendorDataApi(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        data = VendorTemplateFieldData.objects.filter(
+            vendor=request.user.id)
+        serializer = VendorInvoiceSerializer(data, many=True)
+        return Response(serializer.data)

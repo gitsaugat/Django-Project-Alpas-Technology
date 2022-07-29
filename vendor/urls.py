@@ -1,5 +1,5 @@
 from django import urls
-from .views import VendorDashboard, VendorTemplateView, VendorTemplateSetup, VendorTemplateDelete, VendorTemplateEdit, CSV_handling_view, XLS_handling_view, AddConfirmation, Add_Confirm, Decline
+from .views import VendorDashboard, VendorTemplateView, VendorTemplateSetup, VendorTemplateDelete, VendorTemplateEdit, CSV_handling_view, XLS_handling_view, AddConfirmation, Add_Confirm, Decline, VendorDataApi
 
 urlpatterns = [
     urls.path('vendor/dashboard/', VendorDashboard.as_view(),
@@ -21,5 +21,7 @@ urlpatterns = [
     urls.path('add/confirm/<file_id>/<format_data>/',
               Add_Confirm.as_view(), name="data_confirm_add_view"),
     urls.path('add/decline/<file_id>/',
-              Decline.as_view(), name="data_decline_view")
+              Decline.as_view(), name="data_decline_view"),
+    urls.path('api/vendor_data/', VendorDataApi.as_view(),
+              name="vendor_data_api")
 ]
